@@ -1,44 +1,42 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { TOKEN, USER } from "../../../consts";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { setAuth } from "../../../redux/slice/auth";
+
 
 import request from "../../../server/request";
 import loginSchema from "../../../schemas/login";
+import { TOKEN, USER } from "../../../consts";
+import { controlLoading, setAuth } from "../../../redux/slice/auth";
 
 import "./style.scss";
-import { useState } from "react";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const {loading} = useSelector(state =>state.auth)
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // reset,
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
 
   const onSubmit = async (values) => {
     try {
-      setLoading(true);
+      dispatch(controlLoading())
       const {
         data: { token, user },
       } = await request.post("auth/login", values);
-      console.log(token, user);
-      navigate("/admin/dashboard");
+      navigate("/dashboard");
       Cookies.set(TOKEN, token);
       localStorage.setItem(USER, JSON.stringify(user));
       dispatch(setAuth(user));
-      // reset();
+      request.defaults.headers.Authorization = 'Bearer ' + token
     } finally {
-      setLoading(false);
+      dispatch(controlLoading())
     }
   };
 

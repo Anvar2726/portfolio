@@ -4,7 +4,8 @@ import Cookies from "js-cookie";
 
 const initialState = {
   isAuth: Boolean(Cookies.get(TOKEN)),
-  user: localStorage.getItem(USER) || null,
+  user: JSON.parse(localStorage.getItem(USER)) || null,
+  loading: false
 };
 
 const authSlice = createSlice({
@@ -17,15 +18,19 @@ const authSlice = createSlice({
     },logout(state) {
       state.isAuth = false;
       state.user = null;
+      Cookies.remove(TOKEN);
+      localStorage.removeItem(USER);
     },
+    controlLoading(state){
+      state.loading =!state.loading;
+    }
   },
 });
 
-const { setAuth, logout } = authSlice.actions;
+const { setAuth, logout, controlLoading } = authSlice.actions;
 
 const {reducer: authReducer} = authSlice
-console.log(authReducer, setAuth);
 
-export { setAuth, logout };
+export { setAuth, logout, controlLoading };
 
 export default authReducer;
