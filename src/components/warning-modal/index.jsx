@@ -24,8 +24,8 @@ const WarningModal = () => {
         quibusdam.
         </p>
         <div>
-            <button onClick={handleLogout} >Login</button>
-            <button>Call Admin</button>
+            <button className="warning-modal__logout-btn" onClick={handleLogout} >Login</button>
+            <a href="tel:+998908160227" className="warning-modal__link">Call Admin</a>
         </div>
       </div>
     </div>

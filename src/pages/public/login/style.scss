@@ -15,6 +15,12 @@
         gap: 40px;
     }
 
+    &__password-hide{
+        border: none;
+        background-color: transparent;
+        margin-top: 8px;
+    }
+
     &__form{
         display: flex;
         flex-direction: column;

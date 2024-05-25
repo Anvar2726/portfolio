@@ -31,7 +31,7 @@ const AdminLayout = () => {
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" >{user?.role === 'admin' ? "Admin" : "Client"}</div>
+        <div className="demo-logo-vertical" >{user?.role === 'admin' ? "Admin" : `Client: ${user?.username}`}</div>
         <Menu
           theme="dark"
           mode="inline"

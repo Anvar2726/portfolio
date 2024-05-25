@@ -15,9 +15,24 @@
         justify-content: space-between;
         width: 550px;
         background-color: black;
+        box-shadow: rgba(100, 100, 111, 1) 0px 7px 29px 5px;
         color: #fff;
         height: 300px;
         border-radius: 2px;
         padding: 20px;
+    }
+
+    &__logout-btn{
+        border: none;
+        padding: 8px 18px;
+        border-radius: 4px;
+        margin-right: 8px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+    &__link{
+        font-size: 18px;
+        color: #fff;
     }
 }

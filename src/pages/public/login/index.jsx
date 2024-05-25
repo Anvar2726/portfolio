@@ -4,18 +4,22 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 
-
 import request from "../../../server/request";
+import { useState } from "react";
 import loginSchema from "../../../schemas/login";
 import { TOKEN, USER } from "../../../consts";
 import { controlLoading, setAuth } from "../../../redux/slice/auth";
 
+import hide from "../../../assets/images/hide.png";
+import show from "../../../assets/images/show.png";
+
 import "./style.scss";
 
 const LoginPage = () => {
+  const [typePassword, setTypePassqword] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {loading} = useSelector(state =>state.auth)
+  const { loading } = useSelector((state) => state.auth);
   const {
     register,
     handleSubmit,
@@ -26,7 +30,7 @@ const LoginPage = () => {
 
   const onSubmit = async (values) => {
     try {
-      dispatch(controlLoading())
+      dispatch(controlLoading());
       const {
         data: { token, user },
       } = await request.post("auth/login", values);
@@ -34,11 +38,15 @@ const LoginPage = () => {
       Cookies.set(TOKEN, token);
       localStorage.setItem(USER, JSON.stringify(user));
       dispatch(setAuth(user));
-      request.defaults.headers.Authorization = 'Bearer ' + token
+      request.defaults.headers.Authorization = "Bearer " + token;
     } finally {
-      dispatch(controlLoading())
+      dispatch(controlLoading());
     }
   };
+
+  const handlePassword = () =>{
+    setTypePassqword(!typePassword);
+  }
 
   return (
     <section className="login">
@@ -54,14 +62,19 @@ const LoginPage = () => {
             {...register("username")}
           />
           <p>{errors.username?.message}</p>
-          <input
-            className={`login__form__input ${
-              errors.password ? "login__form__input__valid" : null
-            } `}
-            type="password"
-            placeholder="Password"
-            {...register("password")}
-          />
+          <div style={{width: "100%"}}>
+            <input
+              className={`login__form__input ${
+                errors.password ? "login__form__input__valid" : null
+              } `}
+              type={typePassword ? "password" : "text"}
+              placeholder="Password"
+              {...register("password")}
+            />
+            <button className="login__password-hide" type="button" onClick={handlePassword}>
+              <img width={25} src={typePassword ? hide : show} alt="hide icon" />
+            </button>
+          </div>
           <p>{errors.password?.message}</p>
           <button disabled={loading} className="login__form__btn" type="submit">
             Login
