@@ -1,11 +1,11 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import useRolePage from "../../../hooks/useRolePage";
 import { useDispatch, useSelector } from "react-redux";
 const { Header, Sider, Content } = Layout;
 
+import useRolePage from "../../../hooks/useRolePage";
 import "./style.scss"
 import { logout } from "../../../redux/slice/auth";
 const AdminLayout = () => {
@@ -42,7 +42,7 @@ const AdminLayout = () => {
             label: <Link to={`/${key}`}>{key}</Link>,
           })).concat(
             {
-              label: <Button type="primary" danger onClick={handleLogout}>Log out</Button>,
+              label: <Button type="primary" danger onClick={handleLogout}><LogoutOutlined /> Log out</Button>,
             }
           )}
         />

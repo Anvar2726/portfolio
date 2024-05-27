@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { controlBtnloading, controlModal, getExperince, refetch, setPage, setSearch, setSelected } from "../../../redux/slice/experinces";
 import { DatePicker} from 'antd';
 import request from "../../../server/request";
+import dayjs from "dayjs";
 const { RangePicker } = DatePicker;
 
 const ExperincesPage = () => {
@@ -26,15 +27,13 @@ const ExperincesPage = () => {
     try{
       dispatch(controlBtnloading())
       const value = await form.validateFields()
-      const {$d} = value.date[0]
-      const {$d: $d2} = value.date[1]
-      const startDate = $d.toString().slice(0, 15)
-      const endDate = $d2.toString().slice(0, 15)
-      const data = {...value, startDate, endDate}
+      value.startDate = value.date[0]
+      value.endDate = value.date[1]
+      delete value.date
       if(selected === null){
-        await request.post('experiences', data)
+        await request.post('experiences', value)
       }else{
-        await request.put(`experiences/${selected}`, data)
+        await request.put(`experiences/${selected}`, value)
       }
       dispatch(controlModal());
       dispatch(refetch())
@@ -53,7 +52,7 @@ const ExperincesPage = () => {
 
   const editExperince = async(id) =>{
     const {data} = await request(`experiences/${id}`)
-    form.setFieldsValue(data)
+    form.setFieldsValue({...data, date: [dayjs(data.startDate), dayjs(data.endDate)]})
     dispatch(controlModal())
     dispatch(setSelected(id))
   }
