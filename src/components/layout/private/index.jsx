@@ -39,7 +39,7 @@ const AdminLayout = () => {
           items={rolePage.map(({ key, icon: Icon }) => ({
             key: "/" + key,
             icon: <Icon />,
-            label: <Link to={`/${key}`}>{key}</Link>,
+            label: <Link style={{fontSize: "18px", textTransform: "capitalize"}} to={`/${key}`}>{key}</Link>,
           })).concat(
             {
               label: <Button type="primary" danger onClick={handleLogout}><LogoutOutlined /> Log out</Button>,

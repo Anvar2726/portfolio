@@ -1,4 +1,4 @@
-import { UploadOutlined } from "@ant-design/icons";
+import { RadarChartOutlined,BarChartOutlined, ContactsOutlined, CodeOutlined, LaptopOutlined ,MessageOutlined, BankOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
 import DashboardPage from "../pages/private/dashboard";
@@ -16,32 +16,32 @@ const useRolePage = () => {
     {
       key: "dashboard",
       element: DashboardPage,
-      icon: UploadOutlined,
+      icon: BarChartOutlined ,
     },
     {
       key: "education",
       element: EducationPage,
-      icon: UploadOutlined,
+      icon: BankOutlined ,
     },
     {
       key: "experinces",
       element: ExperincesPage,
-      icon: UploadOutlined,
+      icon: RadarChartOutlined ,
     },
     {
       key: "messages",
       element: MessagesPages,
-      icon: UploadOutlined,
+      icon: MessageOutlined,
     },
     {
       key: "portfolios",
       element: PortFoliosPage,
-      icon: UploadOutlined,
+      icon: LaptopOutlined ,
     },
     {
       key: "skills",
       element: SkillsPage,
-      icon: UploadOutlined,
+      icon: CodeOutlined ,
     },
   ];
 
@@ -50,7 +50,7 @@ const useRolePage = () => {
   const adminPages = clientPages.concat({
     key: "users",
     element: UsersPage,
-    icon: UploadOutlined,
+    icon: ContactsOutlined,
   });
   console.log();
 
