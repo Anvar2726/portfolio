@@ -22,16 +22,19 @@ import {
 
 import getImgUrl from "../../../utils";
 import request from "../../../server/request";
+import axios from "axios";
+import { BASE } from "../../../consts";
 
 const PortFoliosPage = () => {
   const { user } = useSelector((state) => state.auth);
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
   const [photo, setPhoto] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [btnLoading, setBtnLoading] = useState(false)
-  const [selected, setSelected] = useState(null)
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [checkPhoto, setCheckPhoto] = useState(true);
 
   const { data, isFetching } = useGetPortfoliosQuery(
     user?.role === "client"
@@ -40,9 +43,10 @@ const PortFoliosPage = () => {
   );
 
   const [deletePortfolio] = useDeletePortfolioMutation();
-  const [createPortfolio] =  useCreatePortfolioMutation();
-  const [getPortfolio] = useGetPortfolioMutation()
-  const [updatePortfolio] = useUpdatePortfolioMutation()
+  const [createPortfolio] = useCreatePortfolioMutation();
+  const [getPortfolio] = useGetPortfolioMutation();
+  const [updatePortfolio] = useUpdatePortfolioMutation();
+
   const getPage = (page) => {
     setPage(page);
   };
@@ -60,65 +64,74 @@ const PortFoliosPage = () => {
 
   const showModal = () => {
     setIsModalOpen(true);
-    form.resetFields()
-    setPhoto(null)
-    setSelected(null)
+    form.resetFields();
+    setPhoto(null);
+    setSelected(null);
   };
 
-  const handleOk = async() => {
-    try{
-      const values = await form.validateFields()
-      const data = {...values, photo: photo._id}
-      setBtnLoading(true)
-      if(selected === null){
-        await createPortfolio(data)
-      }else{
-        await updatePortfolio({id:selected, data})
+  const handleOk = async () => {
+    try {
+      const values = await form.validateFields();
+      const data = { ...values, photo: photo._id };
+      setBtnLoading(true);
+      if (selected === null) {
+        await createPortfolio(data);
+      } else {
+        await updatePortfolio({ id: selected, data });
       }
       setIsModalOpen(false);
-    }finally{
-      setBtnLoading(true)
+    } finally {
+      setBtnLoading(true);
     }
   };
 
-  const portfolioEdit = async(id) =>{
-    try{
-      setBtnLoading(true)
-      const {data} = await getPortfolio(id)
-    setPhoto(data?.photo)
-    form.setFieldsValue(data)
-    setIsModalOpen(true)
-    setSelected(id)
-    }finally{
-      setBtnLoading(false)
+  const portfolioEdit = async (id) => {
+    try {
+      setBtnLoading(true);
+      const { data } = await getPortfolio(id);
+      setPhoto(data?.photo);
+      try {
+        await axios(
+          `${BASE}upload/${data?.photo?._id}.${data?.photo?.name.split(".")[1]}`
+        );
+        setCheckPhoto(true);
+      } catch {
+        setCheckPhoto(false);
+      }
+      form.setFieldsValue(data);
+      setIsModalOpen(true);
+      setSelected(id);
+    } finally {
+      setBtnLoading(false);
     }
-  }
-
+  };
+  console.log(checkPhoto);
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const handlePhoto =  async(e) =>{
-    const formData = new FormData
-    formData.append("file", e.target.files[0])
-    try{
-      setBtnLoading(true)
-      const {data} = await request.post("upload", formData)
-    setPhoto(data)
-    }finally{
-      setBtnLoading(false)
+  const handlePhoto = async (e) => {
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+    try {
+      setBtnLoading(true);
+      const { data } = await request.post("upload", formData);
+      setPhoto(data);
+      setCheckPhoto(true);
+    } finally {
+      setBtnLoading(false);
     }
-  }
+  };
 
-  const deletePhoto = async(id) =>{
-    try{
-      setBtnLoading(true)
-      await request.delete(`upload/${id}`)
-    setPhoto(null)
-    }finally{
-      setBtnLoading(false)
+  const deletePhoto = async (id) => {
+    try {
+      setBtnLoading(true);
+      await request.delete(`upload/${id}`);
+      setPhoto(null);
+    } finally {
+      setBtnLoading(false);
     }
-  }
+  };
 
   const columns = [
     {
@@ -241,18 +254,25 @@ const PortFoliosPage = () => {
           >
             <Input />
           </Form.Item>
-          {
-
-          photo ? 
-          <>
-          <Image src={getImgUrl(photo)} />
-          <Button loading={btnLoading} type="primary" danger onClick={() => deletePhoto(photo?._id)}>
-            Delete
-          </Button>
-          </>
-          :
-          <input disabled={btnLoading} type="file" onChange={handlePhoto} />
-          }
+          {photo ? (
+            checkPhoto ? (
+              <>
+                <Image src={getImgUrl(photo)} />
+                <Button
+                  loading={btnLoading}
+                  type="primary"
+                  danger
+                  onClick={() => deletePhoto(photo?._id)}
+                >
+                  Delete
+                </Button>
+              </>
+            ) : (
+              <input disabled={btnLoading} type="file" onChange={handlePhoto} />
+            )
+          ) : (
+            <input disabled={btnLoading} type="file" onChange={handlePhoto} />
+          )}
         </Form>
       </Modal>
     </Fragment>

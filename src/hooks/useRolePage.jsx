@@ -1,4 +1,13 @@
-import { RadarChartOutlined,BarChartOutlined, ContactsOutlined, CodeOutlined, LaptopOutlined ,MessageOutlined, BankOutlined } from "@ant-design/icons";
+import {
+  RadarChartOutlined,
+  UserOutlined,
+  BarChartOutlined,
+  ContactsOutlined,
+  CodeOutlined,
+  LaptopOutlined,
+  MessageOutlined,
+  BankOutlined,
+} from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
 import DashboardPage from "../pages/private/dashboard";
@@ -8,6 +17,7 @@ import MessagesPages from "../pages/private/messages";
 import PortFoliosPage from "../pages/private/portfolios";
 import SkillsPage from "../pages/private/skills";
 import UsersPage from "../pages/private/users";
+import AccountPage from "../pages/private/account";
 
 const useRolePage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -16,17 +26,17 @@ const useRolePage = () => {
     {
       key: "dashboard",
       element: DashboardPage,
-      icon: BarChartOutlined ,
+      icon: BarChartOutlined,
     },
     {
       key: "education",
       element: EducationPage,
-      icon: BankOutlined ,
+      icon: BankOutlined,
     },
     {
       key: "experinces",
       element: ExperincesPage,
-      icon: RadarChartOutlined ,
+      icon: RadarChartOutlined,
     },
     {
       key: "messages",
@@ -36,16 +46,19 @@ const useRolePage = () => {
     {
       key: "portfolios",
       element: PortFoliosPage,
-      icon: LaptopOutlined ,
+      icon: LaptopOutlined,
     },
     {
       key: "skills",
       element: SkillsPage,
-      icon: CodeOutlined ,
+      icon: CodeOutlined,
+    },
+    {
+      key: "account",
+      element: AccountPage,
+      icon: UserOutlined,
     },
   ];
-
- 
 
   const adminPages = clientPages.concat({
     key: "users",
