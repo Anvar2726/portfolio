@@ -81,6 +81,8 @@ const AdminLayout = () => {
               height: 64,
             }}
           />
+
+          <Link  to={`/clients/portfolio/${user?._id}`}>Portfolio</Link>
         </Header>
         <Content
           style={{

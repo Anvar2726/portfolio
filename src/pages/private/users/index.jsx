@@ -34,13 +34,13 @@ const UsersPage = () => {
     closeModal,
     showModal,
     handlePhoto,
-    photo,
+    photo, 
     role,
     deletUserPhoto,
-    updateClient
+    updateClient,
+    checkPhoto
   } = useUsers();
 
-  console.log(photo);
 
   useEffect(() => {
     getUsers();
@@ -75,17 +75,6 @@ const UsersPage = () => {
       key: "phoneNumber",
       dataIndex: "phoneNumber",
     },
-    {
-      title: "Birthday",
-      key: "birthday",
-      dataIndex: "birthday",
-      render: (birthday) => <p>{birthday?.split("T")[0]}</p>,
-    },
-    // {
-    //   title: "Address",
-    //   key: "address",
-    //   dataIndex: "address",
-    // },
     {
       title: "Role",
       key: "role",
@@ -235,7 +224,7 @@ const UsersPage = () => {
             name="password"
             rules={[
               {
-                required: true,
+                required: false,
                 message: "Please input your password!",
               },
             ]}
@@ -302,7 +291,68 @@ const UsersPage = () => {
           >
             <Input />
           </Form.Item>
+          <Form.Item
+                  label="Info"
+                  name="info"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Github username"
+                  name="github"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Linkedin username"
+                  name="linkedin"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Telegram username"
+                  name="telegram"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Instagram username"
+                  name="instagram"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
           {photo ? (
+            checkPhoto ? 
             <Flex vertical="column" gap={"middle"}>
               <Image src={`${BASE}upload/${photo}`} />
               <Button
@@ -313,7 +363,8 @@ const UsersPage = () => {
               >
                 Delete photo
               </Button>
-            </Flex>
+            </Flex> :
+            <input disabled={btnLoading} type="file" onChange={handlePhoto} />
           ) : (
             <input disabled={btnLoading} type="file" onChange={handlePhoto} />
           )}

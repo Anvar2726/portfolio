@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import request from "../server/request";
 import dayjs from "dayjs";
+import { BASE } from "../consts";
 
 const useUsers = create((set, get) => ({
   users: [],
@@ -13,6 +14,7 @@ const useUsers = create((set, get) => ({
   page: 1,
   total: 0,
   search: "",
+  checkPhoto: false,
 
   handleSearch: (e) => {
     const { getUsers } = get();
@@ -38,7 +40,7 @@ const useUsers = create((set, get) => ({
       data: { data, pagination },
     } = await request("users", { params });
     set({ users: data, total: pagination.total, loading: false });
-  },
+  }, 
   submit: async (form) => {
     try {
       const { getUsers, selected, photo } = get();
@@ -69,7 +71,13 @@ const useUsers = create((set, get) => ({
   editUser: async (form, id) => {
     set({ isOpen: true, selected: id });
     const { data } = await request.get(`users/${id}`);
-    set({ selected: id, photo: data.photo });
+    try{
+      await request(`${BASE}upload/${data?.photo}`)
+      set({ checkPhoto: true });
+    }catch{
+      set({ checkPhoto: false });
+    }
+    set({ selected: id, photo: data?.photo });
     form.setFieldsValue({ ...data, birthday: dayjs(data.birthday) });
   },
   deleteUser: async (id) => {
@@ -86,7 +94,7 @@ const useUsers = create((set, get) => ({
       formData.append("file", e.target.files[0]);
       set({ btnLoading: true });
       const { data } = await request.post("upload", formData);
-      set({ photo: `${data._id}.${data.name.split(".")[1]}` });
+      set({ photo: `${data._id}.${data.name.split(".")[1]}`, checkPhoto: true });
     } finally {
       set({ btnLoading: false });
     }

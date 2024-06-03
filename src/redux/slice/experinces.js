@@ -23,15 +23,7 @@ export const getExperince = createAsyncThunk(
   }
 );
 
-export const getSkills = createAsyncThunk(
-  "skills/fetch",
-  async (params, { getState }) => {
-    const { page, search } = getState().skills;
-    params = { ...params, page, limit: 10, search };
-    const { data } = await request("skills", { params });
-    return data;
-  }
-);
+
 
 const experincesSlice = createSlice({
   initialState,

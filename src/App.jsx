@@ -8,6 +8,8 @@ import PublicLayout from "./components/layout/public";
 import AdminLayout from "./components/layout/private";
 import WarningModal from "./components/warning-modal";
 import useRolePage from "./hooks/useRolePage";
+import ClientUsersPage from "./pages/public/users";
+import PortfolioUIPage from "./pages/public/portfolio";
 
 const App = () => {
   const {  user } = useSelector((state) => state.auth);
@@ -20,7 +22,9 @@ const App = () => {
           <Route index element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="clients" element={< ClientUsersPage/>} />
         </Route>
+          <Route path="/clients/portfolio/:userId" element={<PortfolioUIPage />} />
           <Route  element={ <AdminLayout /> }>
             {
               rolePage.map(({key, element: Element}) => (

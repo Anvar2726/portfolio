@@ -163,6 +163,66 @@ const AccountPage = () => {
                 >
                   <Input />
                 </Form.Item>
+                <Form.Item
+                  label="Info"
+                  name="info"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Github"
+                  name="github"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Linkedin"
+                  name="linkedin"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Telegram"
+                  name="telegram"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Instagram"
+                  name="instagram"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please fill!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
                 <Button loading={loading} type="primary" htmlType="submit">
                   Submit
                 </Button>

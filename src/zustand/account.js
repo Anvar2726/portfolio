@@ -15,7 +15,9 @@ const useAccount = create((set, get) => ({
     try {
       set({ loading: true });
       const { getAccount } = get();
-      await request.put("auth/updatedetails", values);
+      const fields = values.fields.split(",");
+      const data = {...values, fields}
+      await request.put("auth/updatedetails", data);
       toast.success("Data changed successfully")
       getAccount();
     } finally {

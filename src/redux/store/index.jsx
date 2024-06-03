@@ -6,6 +6,7 @@ import skillsReducer from "../slice/skills";
 import experinceReducer from "../slice/experinces";
 import portfolioQuery from "../query/portfolios";
 import educationQuery from "../query/education";
+import clientsQuery from "../query/clients";
 
 const rootReducer = {
   auth: authReducer,
@@ -13,12 +14,13 @@ const rootReducer = {
   experince: experinceReducer,
   portfolio: portfolioQuery.reducer,
   education: educationQuery.reducer,
+  clients: clientsQuery.reducer,
 };
 
 const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(portfolioQuery.middleware, educationQuery.middleware),
+    getDefaultMiddleware().concat(portfolioQuery.middleware, educationQuery.middleware, clientsQuery.middleware),
 });
 
 const StoreProvider = ({ children }) => {
