@@ -49,7 +49,6 @@ const useUsers = create((set, get) => ({
       const fields = value.fields.split(",");
       const data = { ...value, fields, photo };
       set({ btnLoading: true });
-      console.log(data);
       if (selected === null) {
         await request.post("users", data);
       } else {
@@ -71,6 +70,7 @@ const useUsers = create((set, get) => ({
   editUser: async (form, id) => {
     set({ isOpen: true, selected: id });
     const { data } = await request.get(`users/${id}`);
+    form.resetFields();
     try{
       await request(`${BASE}upload/${data?.photo}`)
       set({ checkPhoto: true });
@@ -78,7 +78,7 @@ const useUsers = create((set, get) => ({
       set({ checkPhoto: false });
     }
     set({ selected: id, photo: data?.photo });
-    form.setFieldsValue({ ...data, birthday: dayjs(data.birthday) });
+    form.setFieldsValue({ ...data, birthday: dayjs(data.birthday),fields: data.fields.toString() });
   },
   deleteUser: async (id) => {
     const { getUsers } = get();

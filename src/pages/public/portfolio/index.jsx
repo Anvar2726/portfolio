@@ -180,8 +180,6 @@ const PortfolioUIPage = () => {
             </p>
             <div className="portfolio-projects__row">
               {projects?.map(el => <PortfolioProjectCard key={el._id} {...el} />)}
-              
-
             </div>
           </div>
         </section>
