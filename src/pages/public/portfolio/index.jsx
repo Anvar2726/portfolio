@@ -1,5 +1,11 @@
 import { Fragment, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+// import Typewriter from "typewriter-effect";
+
+import PortfolioProjectCard from "../../../components/card/portfolio-project";
+import request from "../../../server/request";
+import { BASE } from "../../../consts";
+
 
 import linkedin from "../../../assets/images/linkedin-512.png";
 import instagram from "../../../assets/images/instagram-512.png";
@@ -8,13 +14,11 @@ import github from "../../../assets/images/github.png";
 import tel from "../../../assets/images/telephone.png";
 
 import "./style.scss";
-import PortfolioProjectCard from "../../../components/card/portfolio-project";
-import request from "../../../server/request";
-import { BASE } from "../../../consts";
 const PortfolioUIPage = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [skills, setSkills] = useState(null);
+  const [education, setEducation] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -24,16 +28,19 @@ const PortfolioUIPage = () => {
         data: { data: skill },
       } = await request(`skills?user=${userId}&limit=50`);
       setSkills(skill);
+      const {
+        data: { data: education },
+      } = await request(`education?user=${userId}&limit=20`);
+      setEducation(education);
     };
     getUser();
   }, [userId]);
-  console.log(skills);
   return (
     <Fragment>
       <header className="portfolio-header">
         <div className="container">
           <nav className="portfolio-header__nav">
-            <Link className="portfolio-header__logo"> {user?.firstName}</Link>
+            <Link className="portfolio-header__logo"> {user?.firstName} </Link>
             <div className="portfolio-header__box">
               <a href="#home">Home</a>
               <a href="#about">About me</a>
@@ -52,6 +59,17 @@ const PortfolioUIPage = () => {
               <h1 className="portfolio-home__title">
                 {user?.firstName} {user?.lastName}
               </h1>
+              {/* <Typewriter
+                options={{
+                  strings: [`${user?.firstName} ${user?.lastName}`],
+                  autoStart: true,
+                  loop: true,
+                  delay: 50,
+                  deleteSpeed: 800000,
+                  cursorVisible: true,
+                  wrapperClassName: "portfolio-home__title",
+                }}
+              /> */}
               <p className="portfolio-home__text">
                 {user?.fields?.map((el) => (
                   <span key={el}>{el},</span>
@@ -77,7 +95,7 @@ const PortfolioUIPage = () => {
               <a href="#about" className="portfolio-home__btn">
                 About me
               </a>
-              <a href="#about" className="portfolio-home__btn">
+              <a href="#projects" className="portfolio-home__btn">
                 Projects
               </a>
             </div>
@@ -100,14 +118,23 @@ const PortfolioUIPage = () => {
 
               <div className="portfolio-home__education">
                 <h2 className="portfolio-home__education__title">Education:</h2>
-                <h3 className="portfolio-home__education__level">
-                  {" "}
-                  Bachelor(level)
-                </h3>
-                <h3 className="portfolio-home__education__name">
-                  Tashkent technical university (eduction name)
-                </h3>
-                <p className="portfolio-home__education__date">start - end</p>
+                {education?.map((el) => (
+                  <Fragment key={el._id}>
+                    <h3 className="portfolio-home__education__level">
+                      {el.level}
+                    </h3>
+                    <h3 className="portfolio-home__education__name">
+                      {el.name}
+                    </h3>
+                    <h3 className="portfolio-home__education__desc">
+                      {el.description}
+                    </h3>
+                    <p className="portfolio-home__education__date">
+                      I started in {el.startDate.split("T")[0]}, I finished in{" "}
+                      {el.endDate.split("T")[0]}
+                    </p>
+                  </Fragment>
+                ))}
               </div>
 
               <div className="portfolio-home__experience">
@@ -163,7 +190,7 @@ const PortfolioUIPage = () => {
           <div className="container portfolio-contact__container">
             <div>
               <p className="portfolio-contact__text">
-                Satisfied with me? Please contact me
+                Satisfied with me? Please contact me.
               </p>
               <div className="portfolio-home__socials">
                 <a href="https://linkedin.com" target="_blank">
