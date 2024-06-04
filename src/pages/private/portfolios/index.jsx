@@ -66,6 +66,7 @@ const PortFoliosPage = () => {
     setIsModalOpen(true);
     form.resetFields();
     setPhoto(null);
+    // setBtnLoading(true)
     setSelected(null);
   };
 
@@ -81,7 +82,7 @@ const PortFoliosPage = () => {
       }
       setIsModalOpen(false);
     } finally {
-      setBtnLoading(true);
+      setBtnLoading(false);
     }
   };
 
@@ -198,7 +199,10 @@ const PortFoliosPage = () => {
         pagination={false}
         loading={isFetching}
       />
-      <Pagination defaultCurrent={1} total={total} onChange={getPage} />
+      {
+        total > 10 ?
+        <Pagination defaultCurrent={1} total={total} onChange={getPage} /> :null
+      }
       <Modal
         title="Portfolio data"
         open={isModalOpen}

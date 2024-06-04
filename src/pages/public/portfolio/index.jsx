@@ -19,6 +19,7 @@ const PortfolioUIPage = () => {
   const [user, setUser] = useState(null);
   const [skills, setSkills] = useState(null);
   const [education, setEducation] = useState(null);
+  const [projects, setProjects] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -32,6 +33,8 @@ const PortfolioUIPage = () => {
         data: { data: education },
       } = await request(`education?user=${userId}&limit=20`);
       setEducation(education);
+      const {data: {data: projects,}} = await request(`portfolios?user=${userId}&limit=20`)
+      setProjects(projects)
     };
     getUser();
   }, [userId]);
@@ -176,10 +179,9 @@ const PortfolioUIPage = () => {
               Developer, here are a few of my live, real-world projects
             </p>
             <div className="portfolio-projects__row">
-              <PortfolioProjectCard />
-              <PortfolioProjectCard />
-              <PortfolioProjectCard />
-              <PortfolioProjectCard />
+              {projects?.map(el => <PortfolioProjectCard key={el._id} {...el} />)}
+              
+
             </div>
           </div>
         </section>
